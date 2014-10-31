@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"net"
 	"time"
-	"log"
+	"strings"
 )
 
 type Notification struct {
@@ -43,10 +43,11 @@ func New(cert_filename, key_filename, server string, timeout time.Duration) (*Ap
 		return nil, err
 	}
 
+	hostInfo := strings.Split(server, ":")
 	certificate := []tls.Certificate{cert}
 	conf := &tls.Config{
 		Certificates: certificate,
-		ServerName: server
+		ServerName: hostInfo[0],
 	}
 
 	ret := &Apn{

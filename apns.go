@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"net"
 	"time"
+	"log"
 )
 
 type Notification struct {
@@ -22,6 +23,7 @@ type Notification struct {
 // An Apn contain a ErrorChan channle when connected to apple server. When a notification sent wrong, you can get the error infomation from this channel.
 type Apn struct {
 	ErrorChan <-chan error
+	Id 			int
 
 	server  string
 	conf    *tls.Config
@@ -44,6 +46,7 @@ func New(cert_filename, key_filename, server string, timeout time.Duration) (*Ap
 	certificate := []tls.Certificate{cert}
 	conf := &tls.Config{
 		Certificates: certificate,
+		ServerName: server
 	}
 
 	ret := &Apn{
